@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Search, Filter, X, ChevronDown, ChevronUp, BookOpen, Building, CreditCard, Tag, Users, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,6 +36,17 @@ export default function SubjectsPage() {
   const [itemsPerPage] = useState(20);
   const [isMobile, setIsMobile] = useState(false);
 
+  // 防抖搜索
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   // 检测是否为移动设备
   useEffect(() => {
     const handleResize = () => {
@@ -61,9 +72,6 @@ export default function SubjectsPage() {
         setDepartments(['all', ...filterOptions.departments]);
         setCategories(['all', ...filterOptions.categories]);
         setCredits(filterOptions.credits);
-
-        // 加载课程数据
-        loadSubjects();
       } catch (error) {
         console.error('初始化数据失败:', error);
       }
@@ -73,12 +81,12 @@ export default function SubjectsPage() {
   }, []);
 
   // 加载课程数据
-  const loadSubjects = async () => {
+  const loadSubjects = useCallback(async () => {
     try {
       setIsLoading(true);
       // 构建查询参数
       const searchParams = new URLSearchParams();
-      searchParams.append('q', searchQuery);
+      searchParams.append('q', debouncedSearchQuery);
       searchParams.append('departmentName', department === 'all' ? '' : department);
       searchParams.append('publicElectiveOnly', isPublicElective ? 'true' : 'false');
       if (credit !== 'all') searchParams.append('credit', credit);
@@ -95,28 +103,39 @@ export default function SubjectsPage() {
 
       setSubjects(data.subjects);
       setTotalCount(data.total);
-
-      // 检查是否有活跃的筛选条件
-      setActiveFilters(
-        department !== 'all' ||
-        credit !== 'all' ||
-        category !== 'all' ||
-        isPublicElective ||
-        searchQuery !== ''
-      );
     } catch (error) {
       console.error('加载课程数据失败:', error);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [debouncedSearchQuery, department, credit, category, isPublicElective, currentPage, itemsPerPage]);
 
-  // 当筛选条件改变时重新加载数据
+  // 计算活跃筛选条件
+  const hasActiveFilters = useMemo(() => {
+    return department !== 'all' ||
+           credit !== 'all' ||
+           category !== 'all' ||
+           isPublicElective ||
+           debouncedSearchQuery !== '';
+  }, [department, credit, category, isPublicElective, debouncedSearchQuery]);
+
+  // 同步活跃筛选状态
+  useEffect(() => {
+    setActiveFilters(hasActiveFilters);
+  }, [hasActiveFilters]);
+
+  // 筛选条件变化时重置分页并加载数据
   useEffect(() => {
     setCurrentPage(1);
-    loadSubjects();
+  }, [debouncedSearchQuery, department, credit, category, isPublicElective]);
 
-    // 更新URL搜索参数
+  // 加载数据（筛选条件或分页变化时）
+  useEffect(() => {
+    loadSubjects();
+  }, [loadSubjects]);
+
+  // 更新URL参数
+  useEffect(() => {
     const params = new URLSearchParams();
     if (searchQuery) params.set('q', searchQuery);
     if (department !== 'all') params.set('department', department);
@@ -128,12 +147,7 @@ export default function SubjectsPage() {
     router.push(`/subjects${searchString ? `?${searchString}` : ''}`, {
       scroll: false,
     });
-  }, [searchQuery, department, credit, category, isPublicElective]);
-
-  // 分页处理
-  useEffect(() => {
-    loadSubjects();
-  }, [currentPage]);
+  }, [searchQuery, department, credit, category, isPublicElective, router]);
 
   // 重置所有筛选条件
   const resetFilters = () => {
@@ -237,16 +251,6 @@ export default function SubjectsPage() {
     );
   };
 
-  // 检查是否有活跃的筛选条件
-  useEffect(() => {
-    const hasActiveFilters =
-      department !== 'all' ||
-      credit !== 'all' ||
-      category !== 'all' ||
-      isPublicElective ||
-      searchQuery !== '';
-    setActiveFilters(hasActiveFilters);
-  }, [department, credit, category, isPublicElective, searchQuery]);
 
   return (
     <div className="min-h-screen bg-background relative pt-16">
@@ -491,21 +495,68 @@ export default function SubjectsPage() {
             <div className="space-y-6">
               {isLoading ? (
                 // 加载状态 - 骨架屏
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {Array.from({ length: 8 }).map((_, index) => (
-                    <Card key={index} className="overflow-hidden border-0 shadow-md">
-                      <CardHeader className="pb-2">
-                        <Skeleton className="h-6 w-3/4" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  {Array.from({ length: 12 }).map((_, index) => (
+                    <Card key={index} className="overflow-hidden transition-all duration-300 border-0 shadow-md bg-white dark:bg-card animate-pulse">
+                      {/* 顶部渐变条 - 绝对定位 */}
+                      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30"></div>
+                      
+                      <CardHeader className="pt-6 pb-4 relative">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1">
+                            {/* 两行标题 - 模拟课程名称 */}
+                            <Skeleton className="h-5 w-full mb-1 bg-gray-100 dark:bg-gray-800" />
+                            <Skeleton className="h-5 w-2/3 mb-1 bg-gray-100 dark:bg-gray-800" />
+                            {/* 课程代码 - 固定宽度模拟编号 */}
+                            <Skeleton className="h-4 w-24 mt-1 bg-gray-100 dark:bg-gray-800" />
+                          </div>
+                          {/* 徽章占位符 - 有些卡片有，有些没有 */}
+                          {index % 3 === 0 && (
+                            <Skeleton className="h-6 w-20 rounded-full bg-blue-100 dark:bg-blue-900/30" />
+                          )}
+                        </div>
                       </CardHeader>
-                      <CardContent className="space-y-3 pt-0">
-                        <Skeleton className="h-4 w-1/2" />
-                        <Skeleton className="h-4 w-2/3" />
-                        <Skeleton className="h-4 w-1/3" />
-                        <div className="flex gap-2 mt-2">
-                          <Skeleton className="h-6 w-16 rounded-full" />
-                          <Skeleton className="h-6 w-20 rounded-full" />
+
+                      <CardContent className="space-y-3 pb-4">
+                        {/* 院系信息 */}
+                        <div className="flex items-center gap-2">
+                          <Skeleton className="h-4 w-4 rounded bg-blue-100 dark:bg-blue-900/30 shrink-0" />
+                          <Skeleton className="h-4 w-32 bg-gray-100 dark:bg-gray-800" />
+                        </div>
+                        
+                        {/* 学分信息 */}
+                        <div className="flex items-center gap-2">
+                          <Skeleton className="h-4 w-4 rounded bg-green-100 dark:bg-green-900/30 shrink-0" />
+                          <Skeleton className="h-4 w-14 bg-gray-100 dark:bg-gray-800" />
+                        </div>
+                        
+                        {/* 课程类别 - 有条件显示 */}
+                        {index % 2 === 0 && (
+                          <div className="flex items-center gap-2">
+                            <Skeleton className="h-4 w-4 rounded bg-purple-100 dark:bg-purple-900/30 shrink-0" />
+                            <Skeleton className="h-4 w-28 bg-gray-100 dark:bg-gray-800" />
+                          </div>
+                        )}
+                        
+                        {/* 学时信息 */}
+                        <div className="flex items-center gap-2">
+                          <Skeleton className="h-4 w-4 rounded bg-orange-100 dark:bg-orange-900/30 shrink-0" />
+                          <Skeleton className="h-4 w-16 bg-gray-100 dark:bg-gray-800" />
+                        </div>
+                        
+                        {/* 班级数量 */}
+                        <div className="flex items-center gap-2">
+                          <Skeleton className="h-4 w-4 rounded bg-pink-100 dark:bg-pink-900/30 shrink-0" />
+                          <Skeleton className="h-4 w-18 bg-gray-100 dark:bg-gray-800" />
                         </div>
                       </CardContent>
+
+                      <Separator className="my-1" />
+
+                      <CardFooter className="flex justify-between items-center px-6">
+                        <Skeleton className="h-3 w-24 bg-gray-100 dark:bg-gray-800" />
+                        <Skeleton className="h-8 w-18 rounded bg-blue-100 dark:bg-blue-900/30" />
+                      </CardFooter>
                     </Card>
                   ))}
                 </div>
