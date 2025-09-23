@@ -71,10 +71,10 @@ if docker pull "${IMAGE_NAME}" >> "$LOG_FILE" 2>&1; then
     log "New image detected, updating container..."
     
     # 停止并重新创建容器
-    if docker-compose down >> "$LOG_FILE" 2>&1; then
+    if docker compose down >> "$LOG_FILE" 2>&1; then
       log "Old container stopped and removed"
       
-      if docker-compose up -d >> "$LOG_FILE" 2>&1; then
+      if docker compose up -d >> "$LOG_FILE" 2>&1; then
         log "New container started successfully"
       else
         log "Failed to start new container"
