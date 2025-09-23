@@ -24,15 +24,18 @@ set -euo pipefail
 
 # 加载环境变量
 if [ -f ".env" ]; then
-  export $(grep -v '^#' .env | xargs)
+  # 更安全的导出方式，处理带空格的值
+  export $(grep -v '^#' .env | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | xargs)
 else
   echo "Error: .env file not found!"
   exit 1
 fi
 
-# 确保日志目录存在
-if [ ! -d "$(dirname "$LOG_FILE")" ]; then
-  mkdir -p "$(dirname "$LOG_FILE")"
+# 确保日志目录存在且有写入权限
+LOG_DIR=$(dirname "$LOG_FILE")
+if [ ! -d "$LOG_DIR" ]; then
+  sudo mkdir -p "$LOG_DIR"
+  sudo chown $(whoami):$(whoami) "$LOG_DIR"
 fi
 
 # 定义日志函数
@@ -42,6 +45,12 @@ log() {
 }
 
 log "Starting deployment process for ${CONTAINER_NAME}"
+
+# 检查docker-compose.yml是否存在
+if [ ! -f "docker-compose.yml" ]; then
+  log "Error: docker-compose.yml file not found!"
+  exit 1
+fi
 
 # 拉取最新镜像
 log "Pulling latest image: ${IMAGE_NAME}"
@@ -62,10 +71,10 @@ if docker pull "${IMAGE_NAME}" >> "$LOG_FILE" 2>&1; then
     log "New image detected, updating container..."
     
     # 停止并重新创建容器
-    if docker compose down >> "$LOG_FILE" 2>&1; then
+    if docker-compose down >> "$LOG_FILE" 2>&1; then
       log "Old container stopped and removed"
       
-      if docker compose up -d >> "$LOG_FILE" 2>&1; then
+      if docker-compose up -d >> "$LOG_FILE" 2>&1; then
         log "New container started successfully"
       else
         log "Failed to start new container"
