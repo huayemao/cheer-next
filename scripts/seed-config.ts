@@ -9,7 +9,8 @@ const defaultConfigs = [
     key: "footer.authors",
     value: [
       { name: "花野猫", link: "https://huayemao.run" },
-      { name: "steamFinder", link: "https://github.com/SteamFinder" }
+      { name: "SteamFinder", link: "https://github.com/SteamFinder" },
+      { name: "grtsinry43", link: "https://github.com/grtsinry43" }
     ],
     description: "页脚显示的作者信息列表",
     type: "array",
