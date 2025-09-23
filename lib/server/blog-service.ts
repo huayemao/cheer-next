@@ -54,12 +54,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 
   if (!post) return null
 
-  await incrementBlogPostViews(post.id)
-
-  return {
-    ...post,
-    views: post.views + 1
-  } as BlogPost
+  return post as BlogPost
 }
 
 export async function getBlogPostById(id: string): Promise<BlogPost | null> {
@@ -69,12 +64,7 @@ export async function getBlogPostById(id: string): Promise<BlogPost | null> {
 
   if (!post) return null
 
-  await incrementBlogPostViews(post.id)
-
-  return {
-    ...post,
-    views: post.views + 1
-  } as BlogPost
+  return post as BlogPost
 }
 
 export async function incrementBlogPostViews(postId: string): Promise<void> {

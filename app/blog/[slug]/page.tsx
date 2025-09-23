@@ -1,7 +1,6 @@
 import {
   getBlogPostBySlug,
   getBlogPosts,
-  incrementBlogPostViews,
 } from "@/lib/server/blog-service";
 import { notFound } from "next/navigation";
 import { MDXRenderer } from "@/components/blog/mdx-renderer";
@@ -56,8 +55,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  // 增加浏览量
-  await incrementBlogPostViews(post.id);
 
   const tags = Array.isArray(post.tags) ? post.tags : [];
 
