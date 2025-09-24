@@ -46,11 +46,14 @@ RUN adduser --system --uid 1001 nextjs
 # 安装必要的系统依赖
 RUN apk add --no-cache openssl
 
+
 # 复制必要的文件
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
+# 舍弃全部预渲染页面
+RUN find ./.next/server/app -type f -name '*.html' -delete
 
 USER nextjs
 
