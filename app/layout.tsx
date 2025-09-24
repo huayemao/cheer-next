@@ -8,6 +8,8 @@ import { Footer } from '@/components/layout/footer'
 import { ThemeProvider } from '@/components/theme-provider'
 import { getConfigValue } from '@/lib/server/config-service'
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: {
     default: '绮课 - 中南大学课程表查询平台',
