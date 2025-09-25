@@ -24,6 +24,8 @@
 
 > 🎯 **绮课（qike.site）** 为学生、教师提供便捷的课程信息查询服务，支持学生课表、教师课表、教室课表快速查找，提供完整的课程、开课数据和优异的用户体验。
 
+<div align="center">
+
 <table>
 <tr>
 <td>📊 <strong>9,186</strong> 门课程</td>
@@ -32,6 +34,7 @@
 </tr>
 </table>
 
+</div>
 ### 🌟 核心特色
 - 🔍 **多维度查询** - 支持学生、教师、教室、专业四种查询模式
 - 📱 **响应式设计** - 完美适配手机、平板、电脑等各种设备  
@@ -76,15 +79,15 @@
 <div align="center">
 
 **桌面端界面**
-<img src="./images/desktop-screenshot.png" alt="绮课桌面端截图" width="800"/>
+<img src="./images/desktop-screenshot.webp" alt="绮课桌面端截图" width="800"/>
 
 <!-- 移动端界面展示-->
 **移动端界面**
 <table>
 <tr>
-<td><img src="./images/mobile-home.png" alt="移动端首页" width="250"/></td>
-<td><img src="./images/mobile-search.png" alt="移动端搜索" width="250"/></td>
-<td><img src="./images/mobile-schedule.png" alt="移动端课表" width="250"/></td>
+<td><img src="./images/mobile-home.webp" alt="移动端首页" width="250"/></td>
+<td><img src="./images/mobile-search.webp" alt="移动端搜索" width="250"/></td>
+<td><img src="./images/mobile-schedule.webp" alt="移动端课表" width="250"/></td>
 </tr>
 <tr>
 <td align="center">首页界面</td>
