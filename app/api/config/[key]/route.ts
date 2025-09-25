@@ -6,10 +6,8 @@ import { authAdmin } from '@/lib/server/auth'
  * 获取单个配置项
  * GET /api/config/:key
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { key: string } }
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ key: string }> }) {
+  const params = await props.params;
   try {
     const key = params.key
     
@@ -38,10 +36,8 @@ export async function GET(
  * 更新配置项
  * POST /api/config/:key
  */
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { key: string } }
-) {
+export async function POST(request: NextRequest, props: { params: Promise<{ key: string }> }) {
+  const params = await props.params;
   try {
     // 验证管理员权限
     const admin = await authAdmin(request)
@@ -75,10 +71,8 @@ export async function POST(
  * 删除配置项
  * DELETE /api/config/:key
  */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { key: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ key: string }> }) {
+  const params = await props.params;
   try {
     // 验证管理员权限
     const admin = await authAdmin(request)

@@ -216,9 +216,10 @@ async function SubjectDetailContent({ id }: { id: string }) {
   )
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const { id } = params;
-  
+
   try {
     const subject = await prisma.subject.findUnique({
       where: {
@@ -253,16 +254,17 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   } catch (error) {
     console.error('Error generating metadata for subject:', error);
   }
-  
+
   return {
     title: '课程详情 - 绮课',
     description: '中南大学课程详情页面'
   };
 }
 
-export default async function SubjectDetailPage({ params }: { params: { id: string } }) {
+export default async function SubjectDetailPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const { id } = params;
-  
+
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">

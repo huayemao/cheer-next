@@ -28,10 +28,8 @@ async function updateViewsWithRetry(postId: string, retries = 0): Promise<{ view
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { postId: string } }
-) {
+export async function POST(request: NextRequest, props: { params: Promise<{ postId: string }> }) {
+  const params = await props.params;
   try {
     const { postId } = params
 

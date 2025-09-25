@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getBlogPostBySlug } from '@/lib/server/blog-service'
 
 // GET /api/blog/posts/[slug]/by-slug - 通过slug获取文章
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   try {
     const post = await getBlogPostBySlug(params.slug)
     

@@ -3,10 +3,8 @@ import { getBlogPostById, updateBlogPost, deleteBlogPost } from '@/lib/server/bl
 import { verifyToken } from '@/lib/server/auth'
 
 // GET /api/blog/posts/[id] - 获取单篇文章
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { postId: string } }
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ postId: string }> }) {
+  const params = await props.params;
   try {
     const post = await getBlogPostById(params.postId)
     
@@ -28,10 +26,8 @@ export async function GET(
 }
 
 // PUT /api/blog/posts/[id] - 更新文章
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { postId: string } }
-) {
+export async function PUT(request: NextRequest, props: { params: Promise<{ postId: string }> }) {
+  const params = await props.params;
   try {
     const token = request.headers.get('Authorization')?.replace('Bearer ', '')
     
@@ -64,10 +60,8 @@ export async function PUT(
 }
 
 // DELETE /api/blog/posts/[id] - 删除文章
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { postId: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ postId: string }> }) {
+  const params = await props.params;
   try {
     const token = request.headers.get('Authorization')?.replace('Bearer ', '')
     

@@ -4,22 +4,22 @@ import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import TimetableClient from "@/components/timetable-client";
 import { type SearchResult } from "@/lib/actions/search";
-// 动态导入客户端组件
-const TypeSpecificSearchBox = dynamic(() => import('./search-box').then(m => m.TypeSpecificSearchBox), { ssr: false });
-import dynamic from 'next/dynamic';
+import {TypeSpecificSearchBox} from "@/app/search/[type]/search-box";
+
 
 interface SearchPageProps {
-  params: {
+  params: Promise<{
     type: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     q?: string;
-  };
+  }>;
 }
 
-export async function generateMetadata({ params }: SearchPageProps): Promise<Metadata> {
+export async function generateMetadata(props: SearchPageProps): Promise<Metadata> {
+  const params = await props.params;
   const { type } = params;
-  
+
   const titles = {
     student: "学生课表查询 - 绮课",
     teacher: "教师课表查询 - 绮课",
@@ -47,7 +47,9 @@ export async function generateMetadata({ params }: SearchPageProps): Promise<Met
   };
 }
 
-export default function SearchPage({ params, searchParams }: SearchPageProps) {
+export default async function SearchPage(props: SearchPageProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const { type } = params;
   const { q: initialQuery } = searchParams;
 
