@@ -8,11 +8,12 @@ import Link from "next/link";
 import { PageHeader } from "@/components/layout/page-header";
 
 interface BlogPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 // 动态生成博客页面的SEO元数据
-export async function generateMetadata({ searchParams }: BlogPageProps): Promise<Metadata> {
+export async function generateMetadata(props: BlogPageProps): Promise<Metadata> {
+  const searchParams = await props.searchParams;
   const page = Number(searchParams.page) || 1;
   const tag = searchParams.tag as string | undefined;
   const limit = 9;
@@ -146,7 +147,8 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
   };
 }
 
-export default async function BlogPage({ searchParams }: BlogPageProps) {
+export default async function BlogPage(props: BlogPageProps) {
+  const searchParams = await props.searchParams;
   const page = Number(searchParams.page) || 1;
   const tag = searchParams.tag as string | undefined;
   const limit = 9;

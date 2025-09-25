@@ -3,6 +3,7 @@ import { getTimetable } from "@/lib/server/service/getTimetable";
 import { OwnerType } from "@/lib/types/Owner";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import {ClientTimetable} from "@/app/table/[[...slug]]/client-time-table";
 
 // https://beta.nextjs.org/docs/api-reference/segment-config#configrevalidate
 
@@ -48,26 +49,12 @@ async function TimeTableContent({
   );
 }
 
-// Client component wrapper
-import dynamic from "next/dynamic";
-
-const ClientTimetable = dynamic(() => import("@/components/timetable-client"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="text-center space-y-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-        <p className="text-slate-600">加载课表中...</p>
-      </div>
-    </div>
-  ),
-});
-
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string[] };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string[] }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const { slug } = params;
   const [type, id, term, grade] = slug;
 
@@ -135,11 +122,12 @@ export async function generateMetadata({
   }
 }
 
-export default async function TimeTablePage({
-  params,
-}: {
-  params: { slug: string[] };
-}) {
+export default async function TimeTablePage(
+  props: {
+    params: Promise<{ slug: string[] }>;
+  }
+) {
+  const params = await props.params;
   const { slug } = params;
   const [type, id, term, grade] = slug;
 

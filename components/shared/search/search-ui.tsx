@@ -11,7 +11,7 @@ interface SearchUIProps {
   filteredResults: any[];
   activeTab?: string;
   setActiveTab?: (tab: string) => void;
-  searchInputRef: React.RefObject<HTMLInputElement>;
+  searchInputRef: React.RefObject<HTMLInputElement | null>;
   handleSearch: () => void;
   handleKeyPress: (e: React.KeyboardEvent) => void;
   handleResultSelect: (result: any) => void;

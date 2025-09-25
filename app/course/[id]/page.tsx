@@ -244,7 +244,8 @@ async function CourseDetailContent({ id }: { id: string }) {
   )
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const { id } = params;
 
   try {
@@ -284,7 +285,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default async function CourseDetailPage({ params }: { params: { id: string } }) {
+export default async function CourseDetailPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const { id } = params;
 
   return (

@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getFileByUrl } from '@/lib/server/image-service'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { filename: string } }
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ filename: string }> }) {
+  const params = await props.params;
   try {
     const file = await getFileByUrl(`/api/files/${params.filename}`)
     

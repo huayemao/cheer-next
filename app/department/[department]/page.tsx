@@ -4,7 +4,8 @@ import { getProfessionsByDepartmentName } from '@/lib/server/service/profession'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 // 生成页面元数据
-export async function generateMetadata({ params }: { params: { department: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ department: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const department = decodeURIComponent(params.department);
 
   return {
@@ -15,7 +16,8 @@ export async function generateMetadata({ params }: { params: { department: strin
 }
 
 // 主页面组件
-export default async function ProfessionsPage({ params }: { params: { department: string } }) {
+export default async function ProfessionsPage(props: { params: Promise<{ department: string }> }) {
+  const params = await props.params;
   const department = decodeURIComponent(params.department);
 
   try {
@@ -26,7 +28,6 @@ export default async function ProfessionsPage({ params }: { params: { department
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-primary/5 to-secondary/5 relative overflow-hidden pt-16">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,var(--chart-3)/30,transparent_50%),radial-gradient(circle_at_80%_20%,var(--chart-5)/30,transparent_50%),radial-gradient(circle_at_40%_40%,var(--chart-1)/20,transparent_50%)]"></div>
         <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,white/60)] opacity-30"></div>
-
         <div className="relative w-full max-w-4xl mx-auto p-4 lg:p-8 space-y-8">
           {/* 返回按钮 */}
           <Link href="/department" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
