@@ -76,15 +76,15 @@
 <div align="center">
 
 **桌面端界面**
-<img src="./images/desktop-screenshot.png" alt="绮课桌面端截图" width="800"/>
+<img src="./images/desktop-screenshot.webp" alt="绮课桌面端截图" width="800"/>
 
 <!-- 移动端界面展示-->
 **移动端界面**
 <table>
 <tr>
-<td><img src="./images/mobile-home.png" alt="移动端首页" width="250"/></td>
-<td><img src="./images/mobile-search.png" alt="移动端搜索" width="250"/></td>
-<td><img src="./images/mobile-schedule.png" alt="移动端课表" width="250"/></td>
+<td><img src="./images/mobile-home.webp" alt="移动端首页" width="250"/></td>
+<td><img src="./images/mobile-search.webp" alt="移动端搜索" width="250"/></td>
+<td><img src="./images/mobile-schedule.webp" alt="移动端课表" width="250"/></td>
 </tr>
 <tr>
 <td align="center">首页界面</td>
