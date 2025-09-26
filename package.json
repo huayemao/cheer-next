@@ -8,10 +8,7 @@
     "lint": "next lint",
     "start": "node .next/standalone/server.js",
     "postinstall": "prisma generate",
-    "seed:ads": "tsx scripts/seed-ads.ts",
-    "seed:config": "tsx scripts/seed-config.ts",
-    "seed:blog": "tsx scripts/seed-blog.ts",
-    "seed:admin": "tsx scripts/create-admin.ts",
+    "db:seed": "tsx scripts/seed-ads.ts && tsx scripts/seed-config.ts && tsx scripts/seed-blog.ts && tsx scripts/create-admin.ts",
     "check:expired-ads": "node scripts/check-expired-ads.js"
   },
   "dependencies": {

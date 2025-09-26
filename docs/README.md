@@ -2,15 +2,13 @@
 
 # 🌸 绮课（qike.site）
 
-<!-- 项目Logo - 您可以替换为实际的Logo图片
-<img src="./images/qike-logo.png" alt="绮课Logo" width="150" height="150" style="border-radius: 20px;"/>
--->
+
 <img src="https://img.shields.io/badge/中南大学-课程表查询平台-blue?style=for-the-badge&logo=education" alt="中南大学课程表查询平台"/>
 
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fqike.site&style=flat-square&logo=globe)](https://qike.site)
 [![GitHub](https://img.shields.io/badge/GitHub-huayemao/cheer--next-181717?style=flat-square&logo=github)](https://github.com/huayemao/cheer-next)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-[![QQ群](https://img.shields.io/badge/QQ群-1157682866-1EBAFC?style=flat-square&logo=tencentqq)](https://qm.qq.com/q/Z8tLiFJzCk)
+[![QQ群](https://img.shields.io/badge/QQ群-1157682866-1EBAFC?style=flat-square&logo=tencentqq)](https://qm.qq.com/q/dSso71mByM)
 
 **专为中南大学师生打造的课程表查询平台** ✨
 
@@ -35,6 +33,7 @@
 </table>
 
 </div>
+
 ### 🌟 核心特色
 - 🔍 **多维度查询** - 支持学生、教师、教室、专业四种查询模式
 - 📱 **响应式设计** - 完美适配手机、平板、电脑等各种设备  
@@ -100,19 +99,6 @@
 </div>
 
 
-## 🌟 特色与优势
-
-<div align="center">
-
-| 特色功能 | 说明 |
-|:--------:|:-----|
-| 📱 **响应式设计** | 完美适配手机、平板、电脑等各种设备，随时随地查看课表 |
-| 🎨 **优异体验** | 精心设计的界面和交互，让查询变得轻松愉悦 |
-| 📊 **数据准确** | 完整的课程、开课数据，确保信息的准确性和完整性 |
-| 💯 **完全免费** | 为中南大学师生提供永久免费的课表查询服务 |
-
-</div>
-
 ### 🛠️ 更多贴心功能
 
 <div align="center">
@@ -128,176 +114,64 @@
 
 ---
 
-## 🚀 使用方法
 
-<div align="center">
+## 开始开发
 
-### 三步快速开始
+### 环境要求
 
-</div>
+- Node.js 18+
+- pnpm 9+（默认推荐使用 pnpm 作为包管理器）
+
+> 如果你使用 windows 操作系统上进行开发，使用 pnpm 执行 build 等命令时，可能会遇到权限问题等，可通过在系统设置的开发者选项中启用[开发者人员模式](https://learn.microsoft.com/zh-cn/windows/apps/get-started/enable-your-device-for-development)等方式解决。或者也可以考虑使用 yarn 来安装依赖。
+
+### 安装依赖
 
 ```bash
-# Step 1: 访问网站
-🌐 打开 https://qike.site
-
-# Step 2: 输入查询信息
-🔍 在搜索框输入：学号/姓名/教室/专业名称
-
-# Step 3: 选择查询类型并搜索  
-📊 选择 [学生]/[教师]/[教室]/[专业] 并点击搜索
+pnpm install
 ```
 
-### 📱 多终端支持
+### 配置环境变量
 
-<div align="center">
+在项目根目录下创建 `.env` 文件，配置必要的环境变量，如数据库连接字符串、API 密钥等。
 
-| 设备类型 | 支持状态 | 体验评分 |
-|:--------:|:--------:|:--------:|
-| 💻 **桌面端** | ✅ 完全支持 | ⭐⭐⭐⭐⭐ |
-| 📱 **手机端** | ✅ 完全支持 | ⭐⭐⭐⭐⭐ |
-| 📋 **平板端** | ✅ 完全支持 | ⭐⭐⭐⭐⭐ |
+```env
+# 数据库连接字符串
+DATABASE_URL=mysql://root:password@localhost:3306/cheer_next
+```
 
-</div>
+### 同步数据库 schema
 
-### 🎯 高级功能
+```bash
+pnpm run prisma db push
+```
 
-- 🔄 **数据发现**: 通过顶部导航进入，探索课程数据可视化分析
-- 📚 **课程查询**: 浏览所有课程详细信息，支持高级筛选
-- 🏛️ **院系浏览**: 按院系结构查看专业设置和课程安排
+### 初始化数据库
 
----
+<!-- TODO:制作课表测试数据样本，并编写 seed 脚本 -->
 
-## 👥 适用人群
+> 此步骤将自动导入非课表数据，你还将需要课表数据才能运行项目，如果你是中南大学的学生，可以联系作者提供测试数据以供开发调试。
 
-<div align="center">
+```bash
+pnpm run db:seed
+```
 
-| 用户群体 | 使用场景 |
-|:--------:|:---------|
-| 🎓 **中南大学在校学生** | 查看个人课表、了解专业课程安排 |
-| 👨‍🏫 **中南大学教师** | 查看教学安排、了解教室使用情况 |
-| 👨‍💼 **教务管理人员** | 统计分析课程数据、管理教学资源 |
-| 📋 **相关人员** | 了解课程安排、获取教学信息 |
+### 运行开发服务器
 
-</div>
+```bash
+pnpm run dev
+```
 
+### 构建项目
 
-## 使用方法
+```bash
+pnpm run build
+```
 
-1. 访问 [https://qike.site](https://qike.site)
-2. 在首页输入学号、姓名、教室或专业名称，选择查询类型，点击“搜索”即可快速获取课表信息。
-3. 可通过顶部导航进入“数据发现”、“课程查询”、“按院系浏览”等特色服务。
-4. 支持手机、平板、电脑等多终端访问。
+### 构建后启动项目
 
-
-
-## ❓ 常见问题
-
-<details>
-<summary><strong>🔍 绮课的数据来源是什么？</strong></summary>
-
-> 📊 数据来源于中南大学教务系统，实时同步更新。
-> 
-> ⚠️ **重要提示**: 仅供参考，具体以[官方教务系统](http://csujwc.its.csu.edu.cn/)为准。
-
-</details>
-
-<details>
-<summary><strong>🔐 是否需要注册/登录？</strong></summary>
-
-> ✅ **完全免费开放** - 无需注册和登录，所有功能均可直接使用！
-
-</details>
-
-<details>
-<summary><strong>🌐 支持哪些浏览器？</strong></summary>
-
-> 支持所有主流浏览器：
-> - ✅ Chrome (推荐)
-> - ✅ Edge
-> - ✅ Safari  
-> - ✅ Firefox
-> - ✅ 移动端浏览器
-
-</details>
-
-<details>
-<summary><strong>🎨 如何切换主题/显示模式？</strong></summary>
-
-> 🌙 页面右上角可切换深色/浅色主题
-> 
-> 📅 课表页面支持多种显示模式：
-> - 时间显示 ↔️ 序号显示  
-> - 显示周末 ↔️ 隐藏周末
-
-</details>
-
-<details>
-<summary><strong>📱 移动端体验如何？</strong></summary>
-
-> 📱 **完美适配移动端**：
-> - ✅ 响应式设计，自适应屏幕尺寸
-> - ✅ 触摸优化，操作流畅
-> - ✅ 加载速度快，离线缓存支持
-
-</details>
-
-## 📞 联系方式
-
-<div align="center">
-
-### 🤝 联系开发者
-
-<table>
-<tr>
-<td align="center">
-<img src="https://img.shields.io/badge/Email-huayemao4o@outlook.com-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/>
-</td>
-</tr>
-<tr>
-<td align="center">
-<img src="https://img.shields.io/badge/GitHub-huayemao-181717?style=for-the-badge&logo=github" alt="GitHub"/>
-</td>
-</tr>
-</table>
-
-### 💬 加入用户群
-
-<table>
-<tr>
-<td align="center">
-<strong>QQ群1</strong><br>
-<img src="https://img.shields.io/badge/QQ群-1157682866-1EBAFC?style=for-the-badge&logo=tencentqq" alt="QQ群1"/><br>
-<a href="https://qm.qq.com/q/Z8tLiFJzCk">点击加入</a>
-</td>
-<td align="center">
-<strong>QQ群2</strong><br>
-<img src="https://img.shields.io/badge/QQ群-892360730-1EBAFC?style=for-the-badge&logo=tencentqq" alt="QQ群2"/><br>
-<a href="https://qm.qq.com/q/dSso71mByM">点击加入</a>
-</td>
-</tr>
-</table>
-
-### 👨‍💻 开发者主页
-
-[![花野猫的数字花园](https://img.shields.io/badge/🌸_花野猫的数字花园-Visit-FF6B6B?style=for-the-badge)](https://huayemao.run/)
-
-</div>
-
----
-
-## 🔗 友情链接
-
-<div align="center">
-
-| 链接 | 描述 |
-|:----:|:-----|
-| 🌸 [**花野猫的数字花园**](https://huayemao.run/) | 开发者个人博客 |
-| ✨ [**升华工作室**](https://www.54sher.com/) | 中南大学校团委网络信息部 |
-| 🏛️ [**中南大学教务系统**](http://csujwc.its.csu.edu.cn/) | 官方教务管理平台 |
-
-</div>
-
----
+```bash
+pnpm run start
+```
 
 ## 📜 版权声明
 
