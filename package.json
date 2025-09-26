@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "next dev --turbopack",
     "lint": "next lint",
-    "start": "next start",
+    "start": "node .next/standalone/server.js",
     "postinstall": "prisma generate",
     "seed:ads": "tsx scripts/seed-ads.ts",
     "seed:config": "tsx scripts/seed-config.ts",
