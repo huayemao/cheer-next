@@ -12,6 +12,9 @@ export async function generateMetadata(props: { params: Promise<{ department: st
     title: `${department}专业列表 - 绮课`,
     description: `${department}下的所有专业信息和课表查询入口`,
     keywords: ['中南大学', department, '专业', '课程表', '绮课'],
+    alternates: {
+      canonical: `/department/${encodeURIComponent(department)}`
+    }
   };
 }
 

@@ -2,6 +2,7 @@ import {
   getBlogPostBySlug,
   getBlogPosts,
 } from "@/lib/server/blog-service";
+import { Metadata } from 'next';
 import { notFound } from "next/navigation";
 import { MDXRenderer } from "@/components/blog/mdx-renderer";
 import { ShareButtons } from "@/components/blog/share-buttons";
@@ -18,7 +19,7 @@ interface BlogPostPageProps {
 
 export const revalidate = 600;
 
-export async function generateMetadata({ params }: BlogPostPageProps) {
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
 
@@ -38,6 +39,9 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
       publishedTime: post.publishedAt?.toISOString(),
       authors: ["Admin"],
       images: post.coverImage ? [post.coverImage] : [],
+    },
+    alternates: {
+      canonical: `/blog/${slug}`
     },
   };
 }

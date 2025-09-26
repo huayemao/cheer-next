@@ -272,6 +272,9 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
           card: 'summary',
           title: `${course.subject.name} - 开课详情`,
           description: `中南大学${course.subject.name}开课详情，包含课程基本信息、开课安排和选课学生列表`,
+        },
+        alternates: {
+          canonical: `/course/${id}`
         }
       };
     }
@@ -281,7 +284,10 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
 
   return {
     title: '开课详情 - 绮课',
-    description: '中南大学开课详情页面'
+    description: '中南大学开课详情页面',
+    alternates: {
+      canonical: `/course/${id}`
+    }
   };
 }
 

@@ -1,6 +1,6 @@
-import { Metadata } from 'next'
 import { Suspense } from 'react'
 import Link from 'next/link'
+import { Metadata } from 'next'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -248,6 +248,9 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
           card: 'summary',
           title: `${subject.name} - 课程详情`,
           description: `中南大学${subject.name}课程详情，包含课程基本信息和相关开课列表`,
+        },
+        alternates: {
+          canonical: `/subjects/${id}`
         }
       };
     }

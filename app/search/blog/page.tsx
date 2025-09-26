@@ -2,12 +2,71 @@
 
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { Metadata } from 'next'
 import { BlogCard } from '@/components/blog/blog-card'
 import { SearchBox } from '@/components/blog/search-box'
 import { BlogPagination } from '@/components/blog/blog-pagination'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Search } from 'lucide-react'
+
+// 动态生成博客搜索页面的SEO元数据
+export async function generateMetadata({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }): Promise<Metadata> {
+  const query = searchParams.q as string || ''
+  const page = Number(searchParams.page) || 1
+  
+  // 基础URL
+  const baseUrl = 'https://qike.site/search/blog'
+  const currentUrl = query 
+    ? `${baseUrl}?q=${encodeURIComponent(query)}${page > 1 ? `&page=${page}` : ''}`
+    : `${baseUrl}${page > 1 ? `?page=${page}` : ''}`
+  
+  // 生成标题
+  let title = '搜索博客 - 绮课'
+  if (query) {
+    title = `搜索结果: ${query} - 绮课博客`
+  }
+  if (page > 1) {
+    title = `第${page}页 - ${title}`
+  }
+  
+  // 生成描述
+  let description = '在绮课博客中搜索相关文章，了解绮课的最新动态和技术分享。'
+  if (query) {
+    description = `关于"${query}"的博客搜索结果，来自绮课博客平台。`
+  }
+  
+  // 生成关键词
+  const baseKeywords = ['绮课', '博客', '搜索', '中南大学', '课程表']
+  const keywords = query ? [...baseKeywords, query] : baseKeywords
+  
+  return {
+    title,
+    description,
+    keywords,
+    metadataBase: new URL('https://qike.site'),
+    alternates: {
+      canonical: currentUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: currentUrl,
+      siteName: '绮课',
+      locale: 'zh_CN',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  }
+}
 
 interface BlogPost {
   id: string

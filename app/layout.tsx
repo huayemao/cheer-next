@@ -10,6 +10,7 @@ import { getConfigValue } from '@/lib/server/config-service'
 
 export const revalidate = 3600;
 
+// 全局设置默认的元数据配置
 export const metadata: Metadata = {
   title: {
     default: '绮课 - 中南大学课程表查询平台',
@@ -25,7 +26,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  // 基础 URL 配置
   metadataBase: new URL('https://qike.site'),
+  // 默认的 canonical 指向根路径，具体页面可以覆盖这个值
   alternates: {
     canonical: '/',
   },
