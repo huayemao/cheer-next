@@ -16,21 +16,21 @@ import {
 import { cn } from '@/lib/utils';
 
 export function ThemeSelector() {
-  const { theme, setTheme,  } = useTheme();
+  const { theme, setTheme, } = useTheme();
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button variant="outline" size="icon" className="relative">
+      <Button asChild variant="outline" size="icon" className="relative">
+        <DropdownMenuTrigger>
           <Palette className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">选择主题</span>
-        </Button>
-      </DropdownMenuTrigger>
+        </DropdownMenuTrigger>
+      </Button>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>主题设置</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>颜色主题</DropdownMenuLabel>
-        
+
         {themeList.map((themeOption) => (
           <DropdownMenuItem
             key={themeOption.name}
