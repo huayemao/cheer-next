@@ -22,6 +22,9 @@ RUN pnpm config set sharp_libvips_binary_host "https://npmmirror.com/mirrors/sha
     pnpm config set sharp_binary_host "https://npmmirror.com/mirrors/sharp" && \
     pnpm config set registry https://registry.npmmirror.com
 
+# 复制 Prisma schema 文件
+COPY prisma/schema.prisma ./prisma/
+
 # 安装依赖
 RUN pnpm install --frozen-lockfile
 
