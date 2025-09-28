@@ -9,7 +9,8 @@
     "start": "node .next/standalone/server.js",
     "postinstall": "prisma generate",
     "db:seed": "tsx scripts/seed-ads.ts && tsx scripts/seed-config.ts && tsx scripts/seed-blog.ts && tsx scripts/create-admin.ts",
-    "check:expired-ads": "node scripts/check-expired-ads.js"
+    "check:expired-ads": "node scripts/check-expired-ads.js",
+    "prisma": "prisma"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
