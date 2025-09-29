@@ -6,6 +6,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - NODE_ENV=${NODE_ENV}
+      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
     ports:
       - "${PORT}:3000"
     logging:
