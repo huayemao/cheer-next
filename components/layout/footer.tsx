@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Calendar, Mail, Github, Heart, MessageCircle, ExternalLink, Link as LinkIcon } from "lucide-react";
+import React from "react";
+import { Calendar, Mail, Github, Heart, MessageCircle, ExternalLink, User } from "lucide-react";
 import { contactConfig } from "@/lib/config/contact.config";
 import { footerConfig } from "@/lib/config/footer.config";
 
@@ -33,22 +34,23 @@ export function Footer({ authors }: FooterProps) {
             {/* 作者信息 */}
             {authors.length > 0 && (
               <div className="mt-4 text-sm text-muted-foreground">
-                <div className="flex items-center space-x-2">
-                  <LinkIcon className="h-4 w-4" />
-                  <span>作者:</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <User className="h-4 w-4 shrink-0" />
+                  <span className="shrink-0">作者:</span>
                   {authors.map((author, index) => (
-                    <a
-                      key={index}
-                      href={author.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline transition-colors"
-                    >
-                      {author.name}
-                    </a>
+                    <React.Fragment key={index}>
+                      {index > 0 && <span className="text-muted-foreground">, </span>}
+                      <a
+                        href={author.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline transition-colors whitespace-nowrap"
+                      >
+                        {author.name}
+                      </a>
+                    </React.Fragment>
                   ))}
                 </div>
-
               </div>
             )}
             <div className="mt-4 flex items-center space-x-2 text-sm text-muted-foreground">
