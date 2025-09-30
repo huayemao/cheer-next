@@ -80,7 +80,7 @@ export const homeConfig: HomeConfig = {
       {
         icon: "Zap",
         title: "快速查询",
-        description: "输入学号或姓名即可秒查课表，无需等待，支持模糊搜索"
+        description: "输入学号或姓名即可秒查课表，无需等待。（注：为提高使用门槛，防止数据被滥用，绮课暂不支持模糊搜索）"
       },
       {
         icon: "Shield",
