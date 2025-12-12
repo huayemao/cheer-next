@@ -1,5 +1,5 @@
 # 构建阶段
-FROM node:20-alpine AS builder
+FROM node:20-alpine3.18 AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -13,7 +13,8 @@ ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 
 # 安装必要的系统依赖
-RUN apk add --no-cache openssl
+RUN apk update && apk upgrade && \
+    apk add --no-cache openssl
 
 COPY package.json pnpm-lock.yaml ./
 
@@ -38,7 +39,7 @@ RUN pnpm prisma generate
 RUN pnpm build
 
 # 运行阶段
-FROM node:20-alpine AS runner
+FROM node:20-alpine3.18 AS runner
 
 WORKDIR /app
 
