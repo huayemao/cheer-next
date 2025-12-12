@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "node scripts/build-version.js && next build",
     "dev": "next dev --turbopack",
     "lint": "next lint",
     "start": "node .next/standalone/server.js",

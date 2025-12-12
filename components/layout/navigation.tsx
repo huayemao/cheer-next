@@ -21,6 +21,23 @@ import { ThemeSelector } from "@/components/theme-selector";
 export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  const [versionInfo, setVersionInfo] = useState({ gitHash: 'dev', buildDate: '' });
+
+  // 在客户端获取版本信息
+  React.useEffect(() => {
+    async function fetchVersionInfo() {
+      try {
+        const response = await fetch('/version.json');
+        if (response.ok) {
+          const data = await response.json();
+          setVersionInfo(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch version info:', error);
+      }
+    }
+    fetchVersionInfo();
+  }, []);
 
   return (
     <>
@@ -35,12 +52,13 @@ export function Navigation() {
                   绮课
                 </span>
               </Link>
+
             </div>
 
             <NavigationMenu className="ml-auto">
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <Link href="/" className={navigationMenuTriggerStyle()+' bg-transparent'}>
+                  <Link href="/" className={navigationMenuTriggerStyle() + ' bg-transparent'}>
                     <Home className="w-4 h-4 mr-2" />
                     首页
                   </Link>
@@ -54,7 +72,7 @@ export function Navigation() {
                   <NavigationMenuContent className="animate-in fade-in zoom-in-95 duration-150 data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95">
                     <div className="grid gap-3 p-6 w-[400px] md:w-[500px] lg:w-[600px] lg:grid-cols-2 bg-background">
                       <div className="row-span-3">
-                        <SearchDialog 
+                        <SearchDialog
                           customTrigger={
                             <div className="flex h-full w-full select-none cursor-pointer flex-col justify-end rounded-md gradient-blue-lavender p-6 no-underline outline-none transition-all duration-300 hover:shadow-lg focus:shadow-lg">
                               <div className="mb-2 mt-4 text-lg font-medium text-white">
@@ -103,7 +121,7 @@ export function Navigation() {
                           </div>
                           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                             查看教室使用安排
-                      </p>
+                          </p>
                         </a>
                       </NavigationMenuLink>
                       <NavigationMenuLink asChild>
@@ -124,28 +142,28 @@ export function Navigation() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link href="/department" className={navigationMenuTriggerStyle()+ " bg-transparent"}>
+                  <Link href="/department" className={navigationMenuTriggerStyle() + " bg-transparent"}>
                     <Users className="w-4 h-4 mr-2" />
                     院系列表
                   </Link>
                 </NavigationMenuItem>
-                
+
                 <NavigationMenuItem>
-                  <Link href="/discovery" className={navigationMenuTriggerStyle()+ " bg-transparent"}>
+                  <Link href="/discovery" className={navigationMenuTriggerStyle() + " bg-transparent"}>
                     <Palette className="w-4 h-4 mr-2" />
                     数据发现
                   </Link>
                 </NavigationMenuItem>
-                
+
                 <NavigationMenuItem>
-                  <Link href="/subjects" className={navigationMenuTriggerStyle()+ " bg-transparent"}>
+                  <Link href="/subjects" className={navigationMenuTriggerStyle() + " bg-transparent"}>
                     <BookOpen className="w-4 h-4 mr-2" />
                     课程查询
                   </Link>
                 </NavigationMenuItem>
-                
+
                 <NavigationMenuItem>
-                  <Link href="/blog" className={navigationMenuTriggerStyle()+ " bg-transparent"}>
+                  <Link href="/blog" className={navigationMenuTriggerStyle() + " bg-transparent"}>
                     <MessageCircle className="w-4 h-4 mr-2" />
                     博客
                   </Link>
@@ -156,7 +174,6 @@ export function Navigation() {
             <div className="mr-2">
               <SearchDialog />
             </div>
-
             <div className="flex items-center space-x-2">
               <ThemeSelector />
               <Button
@@ -172,6 +189,9 @@ export function Navigation() {
                 <span className="sr-only">切换暗黑模式</span>
               </Button>
             </div>
+            <span className="ml-2 text-xs text-muted-foreground">
+              版本： {versionInfo.buildDate}-{versionInfo.gitHash}
+            </span>
           </div>
         </div>
       </nav>
@@ -186,6 +206,7 @@ export function Navigation() {
                 绮课
               </span>
             </Link>
+
 
             <div className="flex items-center space-x-2">
               <SearchDialog />
@@ -279,6 +300,9 @@ export function Navigation() {
                 博客
               </Link>
             </div>
+            <span className="ml-2 text-xs text-muted-foreground">
+              版本： {versionInfo.buildDate}-{versionInfo.gitHash}
+            </span>
           </div>
         )}
       </nav>
