@@ -8,9 +8,11 @@ RUN npm install -g pnpm
 
 # 设置构建参数
 ARG DATABASE_URL
+ARG NEXT_PUBLIC_SITE_URL
 
 # 设置环境变量
 ENV DATABASE_URL=$DATABASE_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 
 # 安装必要的系统依赖
 RUN apk update && apk upgrade && \

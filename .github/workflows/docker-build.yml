@@ -61,4 +61,5 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             DATABASE_URL=${{ secrets.DATABASE_URL }}
+            NEXT_PUBLIC_SITE_URL= https://qike.site
 

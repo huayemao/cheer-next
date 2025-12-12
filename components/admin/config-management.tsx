@@ -11,14 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
-// 配置项类型定义
-interface ConfigItem {
-  key: string;
-  value: any;
-  description?: string;
-  type: string;
-  group: string;
-}
+// 导入配置项类型和默认配置
+import { ConfigItem, defaultConfigs } from '@/lib/config/default-configs';
 
 // 配置分组定义
 const configGroups = {
@@ -36,47 +30,8 @@ export function ConfigManagement() {
   const [editingConfig, setEditingConfig] = useState<ConfigItem | null>(null);
   const [draftConfigs, setDraftConfigs] = useState<Record<string, any>>({});
   const [hasChanges, setHasChanges] = useState(false);
-  
-  // 初始化配置项
-  const defaultConfigs: ConfigItem[] = [
-    {
-      key: "home.showAds",
-      value: true,
-      description: "是否在首页显示广告轮播",
-      type: "boolean",
-      group: "home"
-    },
-    {
-      key: "home.maxAdCount",
-      value: 5,
-      description: "首页最大显示广告数量",
-      type: "number",
-      group: "home"
-    },
-    {
-      key: "ads.autoRotate",
-      value: true,
-      description: "是否自动轮播广告",
-      type: "boolean",
-      group: "ads"
-    },
-    {
-      key: "ads.rotateInterval",
-      value: 5000,
-      description: "广告轮播间隔时间(毫秒)",
-      type: "number",
-      group: "ads"
-    },
-    {
-      key: "footer.authors",
-      value: [
-        { name: "绮课团队", link: "https://github.com/qike-class" }
-      ],
-      description: "页脚显示的作者信息",
-      type: "array",
-      group: "footer"
-    }
-  ];
+
+  // 配置项已从 @/lib/config/default-configs 导入
 
   useEffect(() => {
     fetchConfigs();
@@ -101,15 +56,19 @@ export function ConfigManagement() {
         return;
       }
 
-      const data = await response.json();
-      
-      // 如果没有配置项，使用默认配置
-      if (!Array.isArray(data) || data.length === 0) {
-        const groupDefaults = defaultConfigs.filter(config => config.group === currentGroup);
-        setConfigs(groupDefaults);
-      } else {
-        setConfigs(data);
-      }
+      const remoteData = await response.json();
+
+      // 获取当前组的默认配置
+      const groupDefaults = defaultConfigs.filter(config => config.group === currentGroup);
+
+      // 将远程数据与默认配置合并
+      // 确保所有默认配置项都存在，如果远程数据中有相同key的项则使用远程值，否则使用默认值
+      const mergedConfigs = groupDefaults.map(defaultConfig => {
+        const remoteConfig = remoteData.find((item: ConfigItem) => item.key === defaultConfig.key);
+        return remoteConfig || defaultConfig;
+      });
+
+      setConfigs(mergedConfigs);
     } catch (error) {
       console.error('获取配置项失败:', error);
       toast.error('获取配置项失败');
@@ -132,12 +91,12 @@ export function ConfigManagement() {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      
+
       // 批量提交所有更改的配置项
       for (const [key, value] of Object.entries(draftConfigs)) {
         const config = configs.find(c => c.key === key);
         if (!config) continue;
-        
+
         const response = await fetch(`/api/config/${key}`, {
           method: 'POST',
           headers: {
@@ -159,7 +118,7 @@ export function ConfigManagement() {
           return;
         }
       }
-      
+
       // 清除草稿状态
       setDraftConfigs({});
       setHasChanges(false);
@@ -200,10 +159,10 @@ export function ConfigManagement() {
     // 获取当前配置值或草稿值
     const config = configs.find(c => c.key === configKey);
     if (!config) return;
-    
+
     const currentValue = draftConfigs[configKey] || config.value || [];
     if (!Array.isArray(currentValue)) return;
-    
+
     let newItem = {};
     // 根据数组中已有的项目结构创建新项目
     if (currentValue.length > 0) {
@@ -217,7 +176,7 @@ export function ConfigManagement() {
         newItem = { name: '', link: '' };
       }
     }
-    
+
     const updatedArray = [...currentValue, newItem];
     saveToDraft(configKey, updatedArray);
   };
@@ -227,10 +186,10 @@ export function ConfigManagement() {
     // 获取当前配置值或草稿值
     const config = configs.find(c => c.key === configKey);
     if (!config) return;
-    
+
     const currentValue = draftConfigs[configKey] || config.value || [];
     if (!Array.isArray(currentValue) || currentValue.length <= 1) return;
-    
+
     const updatedArray = currentValue.filter((_, i) => i !== index);
     saveToDraft(configKey, updatedArray);
   };
@@ -238,7 +197,7 @@ export function ConfigManagement() {
   const renderConfigInput = (config: ConfigItem) => {
     // 获取当前显示的值（优先使用草稿值）
     const displayValue = draftConfigs[config.key] !== undefined ? draftConfigs[config.key] : config.value;
-    
+
     switch (config.type) {
       case 'boolean':
         return (
@@ -283,7 +242,7 @@ export function ConfigManagement() {
       case 'array':
         // 确保值是数组
         const arrayValue = Array.isArray(displayValue) ? displayValue : [];
-        
+
         return (
           <div className="w-full">
             {arrayValue.map((item, index) => (
@@ -366,7 +325,7 @@ export function ConfigManagement() {
               <TabsTrigger key={key} value={key}>{label}</TabsTrigger>
             ))}
           </TabsList>
-          
+
           {Object.keys(configGroups).map((group) => (
             <TabsContent key={group} value={group}>
               {loading ? (
@@ -386,7 +345,7 @@ export function ConfigManagement() {
                       </div>
                     </div>
                   ))}
-                  
+
                   {/* 操作按钮 */}
                   {hasChanges && (
                     <div className="flex justify-end space-x-2 mt-6">

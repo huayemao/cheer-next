@@ -28,9 +28,9 @@ export async function getConfig(key: string): Promise<ConfigItem | null> {
   const config = await prisma.configuration.findUnique({
     where: { key }
   })
-  
+
   if (!config) return null
-  
+
   return {
     key: config.key,
     value: config.value,
@@ -48,11 +48,11 @@ export async function getConfig(key: string): Promise<ConfigItem | null> {
  */
 export async function getConfigValue<T = any>(key: string, defaultValue?: T): Promise<T> {
   const config = await getConfig(key)
-  
+
   if (!config) {
     return defaultValue as T
   }
-  
+
   // 根据配置项类型进行类型转换
   try {
     return convertConfigValue<T>(config.value, config.type)
@@ -75,7 +75,7 @@ export async function getConfigs(keys: string[]): Promise<Record<string, ConfigI
       }
     }
   })
-  
+
   const result: Record<string, ConfigItem> = {}
   configs.forEach(config => {
     result[config.key] = {
@@ -86,7 +86,7 @@ export async function getConfigs(keys: string[]): Promise<Record<string, ConfigI
       group: config.group
     }
   })
-  
+
   return result
 }
 
@@ -100,7 +100,7 @@ export async function getConfigsByGroup(group: string): Promise<ConfigItem[]> {
     where: { group },
     orderBy: { key: 'asc' }
   })
-  
+
   return configs.map(config => ({
     key: config.key,
     value: config.value,
@@ -121,7 +121,7 @@ export async function setConfig(key: string, data: Omit<ConfigItem, 'key'>): Pro
   if (!validateConfigType(data.value, data.type)) {
     throw new Error(`配置项 ${key} 的值类型与指定类型不匹配`)
   }
-  
+
   const config = await prisma.configuration.upsert({
     where: { key },
     update: {
@@ -138,7 +138,7 @@ export async function setConfig(key: string, data: Omit<ConfigItem, 'key'>): Pro
       group: data.group
     }
   })
-  
+
   return {
     key: config.key,
     value: config.value,
@@ -155,7 +155,7 @@ export async function setConfig(key: string, data: Omit<ConfigItem, 'key'>): Pro
  */
 export async function batchSetConfigs(configs: ConfigItem[]): Promise<Record<string, boolean>> {
   const result: Record<string, boolean> = {}
-  
+
   for (const config of configs) {
     try {
       await setConfig(config.key, {
@@ -170,7 +170,7 @@ export async function batchSetConfigs(configs: ConfigItem[]): Promise<Record<str
       result[config.key] = false
     }
   }
-  
+
   return result
 }
 
@@ -201,8 +201,8 @@ function convertConfigValue<T>(value: any, type: string): T {
   // 尝试进行类型转换
   switch (type) {
     case 'boolean':
-      return (typeof value === 'string' 
-        ? (value.toLowerCase() === 'true' || value === '1') 
+      return (typeof value === 'string'
+        ? (value.toLowerCase() === 'true' || value === '1')
         : Boolean(value)) as unknown as T
     case 'number':
       return Number(value) as unknown as T
@@ -226,7 +226,7 @@ function convertConfigValue<T>(value: any, type: string): T {
 function validateConfigType(value: any, type: string): boolean {
   try {
     const convertedValue = convertConfigValue(value, type)
-    
+
     switch (type) {
       case 'boolean':
         return typeof convertedValue === 'boolean'
@@ -244,4 +244,8 @@ function validateConfigType(value: any, type: string): boolean {
   } catch (error) {
     return false
   }
+}
+
+export async function getSiteUrl(): Promise<string> {
+  return await getConfigValue("general.siteUrl") || process.env.NEXT_PUBLIC_SITE_URL || 'https://qike.site'
 }

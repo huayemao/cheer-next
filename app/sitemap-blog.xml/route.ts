@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server'
 import { getBlogPosts } from '@/lib/server/blog-service'
+import { getSiteUrl } from '@/lib/server/config-service'
 
 export async function GET() {
   try {
     const posts = await getBlogPosts({ published: true })
     
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'
+    const baseUrl = await getSiteUrl()
     
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

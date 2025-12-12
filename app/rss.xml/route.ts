@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server'
 import { getBlogPosts } from '@/lib/server/blog-service'
+import { getSiteUrl } from '@/lib/server/config-service'
 
 export async function GET() {
   try {
     const posts = await getBlogPosts({ published: true, limit: 20 })
     
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'
+    const baseUrl = await getSiteUrl()
     
     const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

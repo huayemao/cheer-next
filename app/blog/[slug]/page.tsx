@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Eye, Tag } from "lucide-react";
+import { getConfigValue } from "@/lib/server/config-service";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -49,6 +50,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
+  const siteUrl = await getConfigValue("general.siteUrl") || process.env.NEXT_PUBLIC_SITE_URL || "https://qike.site";
 
   if (!post || !post.published) {
     notFound();
@@ -136,9 +138,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </span>
                   <ShareButtons
                     title={post.title}
-                    url={`${process.env.NEXT_PUBLIC_SITE_URL || ""}/blog/${
-                      post.slug
-                    }`}
+                    url={`${siteUrl}/blog/${post.slug
+                      }`}
                     summary={post.excerpt}
                   />
                 </div>
