@@ -65,14 +65,6 @@ export const footerConfig: FooterConfig = {
       href: 'https://huayemao.run',
       label: '花野猫的数字花园'
     },
-    {
-      href: 'https://www.54sher.com/',
-      label: '中南大学校团委网络信息部（升华工作室）'
-    },
-    {
-      href: 'http://csujwc.its.csu.edu.cn/',
-      label: '中南大学教务系统'
-    }
   ],
   copyright: '© {year} 绮课. All rights reserved.',
   platformName: '中南大学课程表查询平台'
